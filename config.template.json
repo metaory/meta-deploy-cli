@@ -1,0 +1,52 @@
+{
+  "APP_CONFIG": {
+    "NAME": "<name>",
+    "PACKAGE_PATH": "<.>"
+  },
+  "AWS_CONFIG": {
+    "PROFILE": "<default>",
+    "REGISTRY_ID": "<000123456789>",
+    "REGION": "<ap-southeast-1>"
+  },
+  "CONTAINER_CONFIG": {
+    "CONTAINER_PATH": "<.>",
+    "CONTAINER_PORT": "<4000>",
+    "HOST_PORT": "<80>"
+  },
+  "APP_BUILD_SEQUENCE": {
+    "<GROUP_NAME_1>": [{
+        "NAME": "<OPERATION_NAME_1>",
+        "COMMANDS": []
+      },
+      {
+        "NAME": "<OPERATION_NAME_2>",
+        "PATH": ".",
+        "COMMANDS": []
+      }
+    ],
+    "<GROUP_NAME_2>": [{
+      "NAME": "<OPERATION_NAME_1>",
+      "COMMANDS": []
+    }]
+  },
+
+  "ECS": {
+    "CLUSTER_NAME": "{ENV}-{NAME}",
+    "SERVICE_NAME": "s-{NAME}",
+    "REPOSITORY_NAME": "r-{NAME}",
+    "REPOSITORY_URL": "{REGISTRY_ID}.dkr.ecr.{REGION}.amazonaws.com/r-{NAME}"
+  },
+  "CLI_CONFIG": {
+    "BUMP_VERSION": true,
+    "BUMP_VERSION_DEFAULT": true,
+    "PRE_BUILD": true,
+    "PRE_BUILD_DEFAULT": true,
+    "BUILD_IMAGE": true,
+    "BUILD_DEFAULT": true,
+    "TAG_IMAGE": true,
+    "PUSH_IMAGE": true,
+    "RESTART_TASK": true,
+    "VERBOSE": false
+  },
+  "DEPENDENCIES": ["docker", "aws", "node", "yarn"]
+}

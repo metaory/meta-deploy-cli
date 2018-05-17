@@ -1,0 +1,6 @@
+.idea/
+config.json
+yarn-error.log
+node_module
+node_module**
+
