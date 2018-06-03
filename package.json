@@ -3,7 +3,7 @@
   "description": "aws ecs deploy cli tool",
   "author": "metaory",
   "homepage": "https://github.com/metaory/meta-deploy",
-  "version": "2.3.0",
+  "version": "2.3.1-0",
   "private": true,
   "dependencies": {
     "aws-sdk": "^2.226.1",

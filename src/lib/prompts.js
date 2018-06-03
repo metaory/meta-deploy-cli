@@ -102,15 +102,14 @@ module.exports = exports = {
       name: 'version',
       message: `SemVer ` + _c.dim(`https://semver.org (${oldVersion})`),
       choices: [
-        oldVersion,
         'prerelease',
-
         'prepatch',
         'patch',
         'preminor',
         'minor',
         'premajor',
-        'major'
+        'major',
+        oldVersion,
       ].map(x => {
         return {
           name: semVerColor(x),
