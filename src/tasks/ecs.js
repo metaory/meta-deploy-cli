@@ -93,7 +93,7 @@ const restartTask = async (task) => {
 
   _log_ecs(logger.info({ alt: `waiting for service to stabilize`, key: SERVICE_NAME, fp: true }))
 
-  const waitFor = await __waitForService()
+  const waitFor = await __waitForService(task)
   const { failures, services } = waitFor
   if (failures.length) {
     _log_ecs(logger.error({ key: SERVICE_NAME, msg: 'failed to recover', fp: true }))
@@ -155,11 +155,13 @@ const __stopTask = (task) => new Promise((resolve, reject) => {
     else resolve(data)
   })
 })
-const __waitForService = () => new Promise((resolve, reject) => {
+const __waitForService = (task) => new Promise((resolve, reject) => {
   const { AWS_CONFIG: { CLUSTER_NAME: cluster, SERVICE_NAME } } = CONFIG
-  const params = { cluster, services: [SERVICE_NAME] }
+  const params = { cluster, tasks: [task] }
+  // const params = { cluster, services: [SERVICE_NAME] } // todo remove me
 
-  ecs.waitFor('servicesStable', params, (err, data) => {
+  // ecs.waitFor('servicesStable', params, (err, data) => { // todo remove me
+  ecs.waitFor('tasksRunning', params, (err, data) => {
     if (err) reject(err)
     else resolve(data)
   })
