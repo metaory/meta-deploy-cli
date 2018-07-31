@@ -18,6 +18,10 @@ module.exports = exports = {
             value: 'initBuild',
           },
           {
+            name: `${_c.bold(2)} Load Balancing ${env_f()}`,
+            value: 'loadBalancing'
+          },
+          {
             name: `${_c.bold(2)} List ${_c.bold('remote ')}images`,
             value: 'listRemoteImages'
           },

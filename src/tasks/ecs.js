@@ -3,7 +3,7 @@ const moment = require('moment')
 
 const { exec, spawn } = require('../lib/child_process')
 const prompts = require('../lib/prompts')
-const { logger, _c, env_f } = require('../lib/logger')
+const { logger, _c, env_f, print_line } = require('../lib/logger')
 const _log_ecs = require('debug')('ecs')
 const _log_ecr = require('debug')('ecr')
 const _log_docker = require('debug')('docker')
@@ -74,6 +74,116 @@ const listImages = async () => {
   if (action === 're-tag') await reTag(image)
   if (action === 'back') await listImages()
 }
+
+/*--------------------------------------------------*/
+/* LAZY STOP SERVICE WITH LOAD BALANCER
+/*--------------------------------------------------*/
+
+const loadBalancing = async () => {
+
+  _log_ecs(logger.info({ alt: 'listing services', fp: true }))
+
+  const serviceArns = await __listServices()
+
+  const services = []
+
+  serviceArns.forEach((serviceArn) => {
+    const parts = serviceArn.split('/')
+    const serviceName = parts[parts.length - 1]
+
+    const { AWS_CONFIG: { LOAD_BALANCER_SERVICE_NAME } } = CONFIG
+
+    if (serviceName !== LOAD_BALANCER_SERVICE_NAME) {
+      services.push({ 'arn': serviceArn, 'name': serviceName })
+    }
+  })
+
+  for (const service of services) {
+    print_line()
+    const stopped = await restartService(service)
+    print_line()
+  }
+
+}
+
+const restartService = async (service) => {
+
+  _log_ecs(logger.info({ alt: 'stopping service', key: service.name, fp: true }))
+
+  await stopAllTask(service.name)
+
+  _log_ecs(logger.info({ alt: 'service stopped succesfully', key: service.name, fp: true }))
+
+  _log_ecs(logger.info({ alt: `waiting for service to stabilize`, key: service.name, fp: true }))
+
+  const waitForService = await __waitForService1(service.arn)
+
+  _log_ecs(logger.info({ alt: `service stabilized now`, key: service.name, fp: true }))
+
+  const { AWS_CONFIG: { LOAD_BALANCER_SLEEP } } = CONFIG
+
+  _log_ecs(logger.info({ alt: `load balance sleeping`, key: `${LOAD_BALANCER_SLEEP} seconds`, fp: true }))
+
+  await sleep(LOAD_BALANCER_SLEEP * 1000)
+}
+
+const stopAllTask = async (serviceName) => {
+  print_line({ char: ' ' })
+  _log_ecs(logger.info({ alt: 'list tasks', key: serviceName, fp: true }))
+  const tasks = await __listTasks(serviceName)
+
+  for (const task of tasks) {
+    print_line({ char: ' ' })
+    const stopped = await stopTask(task)
+    print_line({ char: ' ' })
+  }
+}
+
+const stopTask = async (task) => {
+  _log_ecs(logger.info({ alt: 'stopping task', key: task, fp: true }))
+  const stopped = await __stopTask(task)
+  _log_ecs(logger.info({ alt: 'task stopped succesfully', key: task, fp: true }))
+}
+
+const sleep = (millis) => new Promise((resolve) => {
+  setTimeout(resolve, millis);
+});
+
+const __listServices = () => new Promise((resolve, reject) => {
+  const { AWS_CONFIG: { CLUSTER_NAME: cluster, } } = CONFIG
+
+  const params = { cluster }
+  ecs.listServices(params, (err, data) => {
+    if (err) reject(err)
+    else resolve(data['serviceArns'])
+  })
+});
+
+const __listTasks = (serviceName) => new Promise((resolve, reject) => {
+  const { AWS_CONFIG: { CLUSTER_NAME: cluster } } = CONFIG
+
+  const params = { cluster, serviceName }
+
+  ecs.listTasks(params, (err, data) => {
+    if (err) reject(err)
+    else resolve(data['taskArns'])
+  })
+
+})
+
+const __waitForService1 = (service) => new Promise((resolve, reject) => {
+  const { AWS_CONFIG: { CLUSTER_NAME: cluster } } = CONFIG
+  const params = { cluster, services: [service] }
+
+  ecs.waitFor('servicesStable', params, (err, data) => {
+    if (err) reject(err)
+    else resolve(data)
+  })
+})
+
+/*--------------------------------------------------*/
+
+
 const listTasks = async () => {
   _log_ecs(logger.info({ alt: 'list tasks', fp: true }))
   const tasks = await __describeTasks()
@@ -109,7 +219,8 @@ const restartTask = async (task) => {
 module.exports = exports = {
   login,
   listImages,
-  stopAll
+  stopAll,
+  loadBalancing
 }
 
 const { runContainer } = require('./docker')
