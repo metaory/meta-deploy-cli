@@ -10,7 +10,6 @@ const _log_ecr = require('debug')('ecr')
 const _log_docker = require('debug')('docker')
 
 const { AWS_CONFIG: { REGISTRY_ID, REGION, PROFILE } } = CONFIG
-const { USER } = process.env
 
 const wait = (waitFor = '5m') => new Promise(resolve => setTimeout(resolve, ms(waitFor))) // todo
 

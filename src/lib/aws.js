@@ -1,5 +1,8 @@
 const AWS = require('aws-sdk')
 
+const { AWS_CONFIG: { REGISTRY_ID, REGION, PROFILE } } = CONFIG
+const { USER } = process.env
+
 const ecr = new AWS.ECR({ region: REGION })
 const ecs = new AWS.ECS({ region: REGION })
 
