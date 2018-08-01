@@ -3,7 +3,7 @@
   "description": "aws ecs deploy cli tool",
   "author": "metaory",
   "homepage": "https://github.com/metaory/meta-deploy",
-  "version": "2.3.1-0",
+  "version": "2.3.1",
   "private": true,
   "dependencies": {
     "aws-sdk": "^2.226.1",
@@ -11,7 +11,8 @@
     "debug": "^3.1.0",
     "docker-cli-js": "^2.2.0",
     "inquirer": "^5.2.0",
-    "moment": "^2.22.1"
+    "moment": "^2.22.1",
+    "ms": "^2.1.1"
   },
   "scripts": {
     "start": "node index.js",
