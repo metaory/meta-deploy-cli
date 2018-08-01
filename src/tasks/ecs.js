@@ -3,7 +3,7 @@ const ms = require('ms')
 
 const { exec, spawn } = require('../lib/child_process')
 const prompts = require('../lib/prompts')
-const aws = require('../lib/prompts')
+const aws = require('../lib/aws')
 const { logger, _c, env_f, print_line } = require('../lib/logger')
 const _log_ecs = require('debug')('ecs')
 const _log_ecr = require('debug')('ecr')
