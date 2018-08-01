@@ -2,7 +2,8 @@
   "APP_CONFIG": {
     "NAME": "<name>",
     "PACKAGE_PATH": "<.>",
-    "LOAD_BALANCER": "nginx"
+    "LOAD_BALANCER": false,
+    "LOAD_BALANCER_NAME": "nginx"
   },
   "AWS_CONFIG": {
     "PROFILE": "<default>",
@@ -34,7 +35,7 @@
   "ECS": {
     "CLUSTER_NAME": "{ENV}-{NAME}",
     "SERVICE_NAME": "s-{NAME}",
-    "LOAD_BALANCER_SERVICE_NAME": "s-{LOAD_BALANCER}",
+    "LOAD_BALANCER_SERVICE_NAME": "s-{LOAD_BALANCER_NAME}",
     "REPOSITORY_NAME": "r-{NAME}",
     "REPOSITORY_URL": "{REGISTRY_ID}.dkr.ecr.{REGION}.amazonaws.com/r-{NAME}",
     "LOAD_BALANCER_SLEEP": "10"

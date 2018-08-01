@@ -4,7 +4,7 @@ const ms = require('ms')
 const { exec, spawn } = require('../lib/child_process')
 const prompts = require('../lib/prompts')
 const aws = require('../lib/aws')
-const { logger, _c, env_f, print_line } = require('../lib/logger')
+const { logger, _c, env_f, print_line, log_box } = require('../lib/logger')
 const _log_ecs = require('debug')('ecs')
 const _log_ecr = require('debug')('ecr')
 const _log_docker = require('debug')('docker')
@@ -83,6 +83,8 @@ const listImages = async () => {
 
 const loadBalancing = async () => {
 
+  log_box('LOAD BALANCING');
+
   _log_ecs(logger.info({ alt: 'listing services', fp: true }))
 
   const serviceArns = await aws.listServices()
@@ -103,7 +105,7 @@ const loadBalancing = async () => {
   for (const service of services) {
     print_line()
     const stopped = await restartService(service)
-    print_line()
+    print_line({ char: ' ' })
   }
 
 }
