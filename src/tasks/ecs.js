@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk')
 const moment = require('moment')
+const ms = require('ms')
 
 const { exec, spawn } = require('../lib/child_process')
 const prompts = require('../lib/prompts')
@@ -10,6 +11,8 @@ const _log_docker = require('debug')('docker')
 
 const { AWS_CONFIG: { REGISTRY_ID, REGION, PROFILE } } = CONFIG
 const { USER } = process.env
+
+const wait = () => new Promise(resolve => setTimeout(resolve, ms("5m"))) // todo
 
 const login = async () => {
   try {
@@ -81,8 +84,9 @@ const listTasks = async () => {
 }
 const stopAll = async () => {
   const tasks = await listTasks()
-  for (const task of tasks) {
+  for (const [index, task] of tasks.entries()) {
     const stopped = await restartTask(task)
+    if (index + 1 !== tasks.length) await wait()
   }
 }
 const restartTask = async (task) => {
