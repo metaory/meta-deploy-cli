@@ -3,7 +3,8 @@
     "NAME": "<name>",
     "PACKAGE_PATH": "<.>",
     "LOAD_BALANCER": false,
-    "LOAD_BALANCER_NAME": "nginx"
+    "LOAD_BALANCER_NAME": "nginx",
+    "CACHE_NAME": "redis"
   },
   "AWS_CONFIG": {
     "PROFILE": "<default>",
@@ -38,6 +39,7 @@
     "LOAD_BALANCER_SERVICE_NAME": "s-{LOAD_BALANCER_NAME}",
     "REPOSITORY_NAME": "r-{NAME}",
     "REPOSITORY_URL": "{REGISTRY_ID}.dkr.ecr.{REGION}.amazonaws.com/r-{NAME}",
+    "CACHE_SERVICE_NAME": "s-{CACHE_NAME}",
     "LOAD_BALANCER_SLEEP": "10"
   },
   "CLI_CONFIG": {

@@ -94,10 +94,8 @@ const loadBalancing = async () => {
   serviceArns.forEach((serviceArn) => {
     const parts = serviceArn.split('/')
     const serviceName = parts[parts.length - 1]
-
-    const { AWS_CONFIG: { LOAD_BALANCER_SERVICE_NAME } } = CONFIG
-
-    if (serviceName !== LOAD_BALANCER_SERVICE_NAME) {
+    const { AWS_CONFIG: { LOAD_BALANCER_SERVICE_NAME , CACHE_SERVICE_NAME } } = CONFIG
+    if (serviceName !== LOAD_BALANCER_SERVICE_NAME && serviceName !== CACHE_SERVICE_NAME) {
       services.push({ 'arn': serviceArn, 'name': serviceName })
     }
   })
