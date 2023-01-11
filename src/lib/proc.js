@@ -75,8 +75,8 @@ Object.defineProperty(global, 'APP_VERSION', {
 })
 
 function replaceVars(field, config) {
-  const { APP_CONFIG: { NAME }, AWS_CONFIG: { REGISTRY_ID, REGION }, ECS } = config
-  const replaceFields = { NAME, ENV, REGISTRY_ID, REGION }
+  const { APP_CONFIG: { NAME, LOAD_BALANCER_NAME, CACHE_NAME }, AWS_CONFIG: { REGISTRY_ID, REGION }, ECS } = config
+  const replaceFields = { NAME, ENV, REGISTRY_ID, REGION, LOAD_BALANCER_NAME, CACHE_NAME }
   return ECS[field].replace(/{\w+}/g, (matched) => {
     return replaceFields[matched.replace(/{|}/g, '')]
   })

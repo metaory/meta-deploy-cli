@@ -114,6 +114,14 @@ const log_error = (e = 'Error') => {
     errorLogger(_c.red(e.stack))
 }
 
+const log_box = (msg) => {
+  print_line({ char: ' ' })
+  print_line()
+  logger.info({ alt: msg })
+  print_line()
+  print_line({ char: ' ' })
+}
+
 const env_f = (env = ENV) => _c[(env => {
   switch (env) {
     case 'prod':
@@ -136,5 +144,6 @@ module.exports = exports = {
   logger,
   log_error,
   print_line,
-  log_key_value
+  log_key_value,
+  log_box
 }
