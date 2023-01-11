@@ -34,10 +34,6 @@ module.exports = exports = {
   settings: async () => {
     await configure.settings()
     await exports.menu()
-  },
-  loadBalancing: async() => {
-    await ecs.login()
-    await ecs.loadBalancing()
   }
 }
 const prompts = require('../lib/prompts')

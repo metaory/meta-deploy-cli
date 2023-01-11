@@ -90,9 +90,7 @@ const initBuildSequence = async () => {
   await buildImage()
   await tagImage()
   await pushImage()
-  const { APP_CONFIG: { LOAD_BALANCER } } = CONFIG
-  if (LOAD_BALANCER) await ecs.loadBalancing()
-  else await ecs.stopAll()
+  await ecs.stopAll()
 }
 
 module.exports = exports = {
